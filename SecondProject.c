@@ -3,14 +3,47 @@
 
 typdef struct node				/* Define the node structure */
 {
-    int data;
+    long long data;
     struct node *next;
 }
 *head;
 
-int tablesize=0;				/* Initial easily modified table size */
-node table[tablesize];			/*Initial table that depends on the tablesize variable. It is an array of nodes*/
+long long uniques=0
+long long tablesize=0;				/* Initial easily modified table size */
+node table[tablesize];				/*Initial table that depends on the tablesize variable. It is an array of nodes*/
+			
+long long readFile(FILE *fp)
+{
+	FILE *input;
+	char memoryAddress[100];
+	long long convAddress;
+	
+	if (!(input = fopen(argv[1],"r")))
+	{
+		printf("error\n");
+		return 0;
+	}
+	
+	if (fscanf(input, "%s", memoryAddress) != EOF)
+	{
+		convAddress=strtoull(*memoryAddress, NULL, 0) ;
+	}
+			   
+	fclose(input);
 
+	return convAddress;
+	
+
+	
+}
+			
+
+			
+long long hash(long long num)
+{
+	
+}			
+			
 void insertList(int num)
 {
 	/*creates the node to add and the iterator*/
@@ -30,6 +63,7 @@ void insertList(int num)
 		
 		
 	}
+	
 	/* else if the first is a duplicate*/
 	else if (iter->data==num)
 	{
@@ -75,8 +109,8 @@ void hashInsertion(int num)
     table[probe] = num;
 
 }
-int hash(int num
+
+void printUnique()
 {
 	
 }
-void print
