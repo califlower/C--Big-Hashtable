@@ -5,12 +5,11 @@ typdef struct node				/* Define the node structure */
 {
     long long data;
     struct node *next;
-}
-*head;
+};
 
 long long uniques=0
-long long tablesize=0;				/* Initial easily modified table size */
-node table[tablesize];				/*Initial table that depends on the tablesize variable. It is an array of nodes*/
+long long tablesize=1000;				/* Initial easily modified table size */
+node table[tablesize]={NULL};		/*Initial table that depends on the tablesize variable. It is an array of nodes*/
 			
 long long readFile(FILE *fp)
 {
@@ -33,84 +32,59 @@ long long readFile(FILE *fp)
 
 	return convAddress;
 	
-
-	
 }
 			
-
 			
 long long hash(long long num)
 {
-	
+	//unknown yet
 }			
 			
-void insertList(int num)
+void insertList(long long num)
 {
 	/*creates the node to add and the iterator*/
+	
+	
 	struct node *toInsert=(struct node *)malloc(sizeof(struct node));
-    struct node *iter;
-	
-	/*adds num to the node to insert and makes the iterator at the head*/
-	toInsert->data=num;
-    iter=head;
-	
-	/* if linked list is empty or the first element is larger than the input*/
-	
-	if (iter==NULL || head->data>num)
+	struct node *iterator;
+	if (table[num]==NULL)
 	{
-		head=toInsert;
-		head->next=iter;
-		
-		
-	}
-	
-	/* else if the first is a duplicate*/
-	else if (iter->data==num)
-	{
-		return;
+		table[num]=toInsert;
+		uniques++;
 	}
 	else
 	{
-		/* traverse while it is not null*/
-		while (iter!=NULL)
-		{   
-	/* duplicate check*/
-			if (iter->data==num)
+		iterator=table[num];
+		while (iterator!=NULL)
+		{
+			if (iterator->data==num)
 			{
-				return;
-			}				
-			if (iter->data <=num && (iter->next == NULL || iter->next->data > num)) 
-			{
-				toInsert->next=iter->next;
-				iter->next=toInsert;
-				return;
+				return 0;
 			}
-			iter=iter->next;
+			if (iterator->next==NULL)
+			{
+				toInsert->next=iterator->next;
+				iterator->next=toInsert;
+				return 0;
+			}
+			iterator=iterator->next;
 		}
+		   
+	   
 	}
 	
 	
 	
-
-}
-
-void hashInsertion(int num)
-{
-	int probe = (num)%1000;                                  
-    while (table[probe]!=0)
-	{   
-		if (table[probe]==num)
-		{
-			printf("duplicate\n");
-			return;
-		}
-        probe = (probe+1)%1000;                 
-    }
-    table[probe] = num;
-
 }
 
 void printUnique()
 {
+	printf(%d,uniques);
+}
+
+int main(int argc, char** argv)
+{
+	
+	
 	
 }
