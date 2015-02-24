@@ -1,107 +1,52 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "stdio.h"
+#include "stdlib.h"
 
-typdef struct node				/* Define the node structure */
+#define TRUE 1
+#define FALSE !TRUE
+#define SIZE 1000
+
+
+typedef struct node
 {
-    long long data;
+    long long value;
     struct node *next;
-};
+}hash;
 
-long long uniques=0
-long long tablesize=1000;				/* Initial easily modified table size */
-node table[tablesize]={NULL};		/*Initial table that depends on the tablesize variable. It is an array of nodes*/
-			
-/*long long readFile(FILE *fp)
-{
-	FILE *input;
-	char memoryAddress[100];
-	long long convAddress;
-	
-	if (!(input = fopen(argv[1],"r")))
-	{
-		printf("error\n");
-		return 0;
-	}
-	
-	if (fscanf(input, "%s", memoryAddress) != EOF)
-	{
-		convAddress=strtoull(*memoryAddress, NULL, 0) ;
-		fclose(input);
-		return convAddress;
-	}
-		
-		return NULL;
-	
-	
-}*/
-			
-			
-long long hash(long long num)
-{
-	//unknown yet
-}			
-			
-void insertList(long long num)
-{
-	/*creates the node to add and the iterator*/
-	
+static hash* hashTable[SIZE];
 
-	struct node *toInsert=(struct node *)malloc(sizeof(struct node));
-	struct node *iterator;
+
+long long hashNum(long long value)
+{
+    return (value%SIZE);
+}
+
+void chainedHashInsert(long long value)
+{
+    long long tempValue = hashNum(value);
 	
-	if (table[num]==NULL)
-	{
-		table[num]=toInsert;
-		uniques++;
-	}
+    if(hashTable[tempValue] == NULL)
+	{                              
+        hashTable[tempValue] = malloc(sizeof(hash));    
+        hashTable[tempValue]->value = value;
+        hashTable[tempValue]->next = NULL;
+    }
 	else
-	{
-		iterator=table[num];
-		while (iterator!=NULL)
-		{
-			if (iterator->data==num)
-			{
-				return 0;
-			}
-			if (iterator->next==NULL)
-			{
-				toInsert->next=iterator->next;
-				iterator->next=toInsert;
-				return 0;
-			}
-			iterator=iterator->next;
-		}  
-	}
+	{                                                          
+        hash *hashNode = hashTable[tempValue];
+        while(hashNode->next!=NULL)
+		{                           // scrolls down the list
+            hashNode = hashNode->next;
+        }
+        hashNode->next = malloc(sizeof(hash)); 
+        hashNode->next->value = value;
+        hashNode->next->next = NULL;
+    }
 }
 
-void printUnique()
-{
-	printf(%d,uniques);
-}
 
-int main(int argc, char** argv)
+/* MAIN FUNCTION */
+int main (int argc, char const *argv[])
 {
-	
-	FILE *input;
-	char memoryAddress[100];
-	long long convAddress;
-	
-	if (!(input = fopen(argv[1],"r")))
-	{
-		printf("error\n");
-		return 0;
-	}
-	
-	while (fscanf(input, "%s", memoryAddress) != EOF)
-	{
-		convAddress=strtoull(*memoryAddress, NULL, 0) ;
-		long long hashNumber=hash(convAddress);
-		insertList(hashNumber);
-	}
-	
-		printUnique();
-		fclose(input);
-		return 0;
-	
-	
+   
+
 }
