@@ -1,7 +1,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
-#define LOADFACTOR .5
+
 
 
 
@@ -15,11 +15,11 @@ typedef struct node
 
 
 
-/*the current size of the table initialized to 1000*/
-unsigned long long SIZE=1000;
 
+
+unsigned long long SIZE=1000;
 /*A hashtable of pointers to nodes called hash*/
-hash* table;
+static hash* table[1000];
 
 /*the counter is used for determining load factor*/
 static unsigned long long counter=0;
@@ -28,10 +28,6 @@ static unsigned long long uniques=0;
 
 
 
-void createTable()
-{
-	table=calloc(SIZE,sizeof(hash));
-}
 
 
 
@@ -53,11 +49,8 @@ void chainedHashInsert(unsigned long long value, hash *hashTable[])
 {
 	/* tempValue is the hashed number to be inserted into the table*/
    unsigned long long tempValue = hashNum(value);
-
-	
 	
 	/*if the location that we want to insert the value is empty then we do this*/
-    
 	if(hashTable[tempValue] == NULL)
 	{
 		/*Counts unique entries*/
@@ -65,6 +58,7 @@ void chainedHashInsert(unsigned long long value, hash *hashTable[])
         hashTable[tempValue] = malloc(sizeof(hash));    
         hashTable[tempValue]->value = value;
         hashTable[tempValue]->next = NULL;
+		
 		return;
     }
 	
@@ -102,42 +96,10 @@ void chainedHashInsert(unsigned long long value, hash *hashTable[])
 
 
 
-
-/*Resizes the silly table*/
-void resizeTable()
-{
-
-	
-	
-}
-
-/*Determines whether to resize or no */
-void resizeYet()
-{
-	
-	long double tableLoad=(long double)counter/(unsigned long long)SIZE;
-	if (tableLoad>=LOADFACTOR)
-	{
-		resizeTable();
-	}
-}
-
-
-
-
-
-
 /*Pass the value to be printed and the name of the hashtable*/
 void print(unsigned long long val,hash *hashTable[])
 {
-	
-	int x;
-	for (x=0;x<SIZE;x++)
-	{
-		if (table[x]!=0)
-			printf("poop");
-		
-	}
+
 	
 	hash *hashMapNode = hashTable[hashNum(val)];
 	
@@ -159,11 +121,7 @@ void print(unsigned long long val,hash *hashTable[])
 int main (int argc, char const *argv[])
 {
  	
-	createTable();
-	chainedHashInsert(5,&table);
-	print(5,&table);
-	resizeTable();
-	/*FILE *fp=fopen(argv[1],"r");
+	FILE *fp=fopen(argv[1],"r");
 	if (!(fp = fopen(argv[1],"r")))
 	{
 		printf("error\n");
@@ -177,11 +135,12 @@ int main (int argc, char const *argv[])
 		{     
 		unsigned long long number=strtoull (key,NULL,0);
 		chainedHashInsert(number,table);
+		
 		}                    
 	printf("Unique numbers \n");
 	printf("%lld\n", uniques);
-	fclose(fp);*/
-	//resizeTable(table);
+	fclose(fp);
+
 	return 0;
 
 
